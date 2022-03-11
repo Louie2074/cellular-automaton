@@ -2,6 +2,18 @@
 import numpy as np
 from matplotlib import pyplot
 
+#############################
+# Author: Louis Nguyen
+# To use this program, 
+# The 1st parameter is a positive integer that specifies the rule number
+# The 2nd parameter is a positive integer that specifies the amount of rows you want
+# The 3rd parameter is a positive integer that specifies the amount of column's you want
+# The 4th parameter is a positive integer between 0-2 inclusive that specifies the styling of the first row,
+# 0 is a row of 0's with a 1 in the middle, 1 is a row of 1's with a 0 in the middle, 2 is a random row of 1's and 0's
+# The 5th parameter is optional and should only be inputted if the column parameter is even, 
+# 'left' if you wish the starting row digit to start left of the middle, 'right' if you wish the starting row digit to start right of the middle
+#############################
+
 #Static rules
 rules = ['111','110','101','100','011','010','001','000']
 
@@ -9,9 +21,9 @@ rules = ['111','110','101','100','011','010','001','000']
 def step(x, binary):
     #convert np array to regular array and expand on both sides
     expanded = np.ndarray.tolist(x)
-    expanded.append(0)
-    expanded.insert(0, 0)
-    
+    expanded.append(expanded[-1])
+    expanded.insert(0,expanded[0])
+
     #Array to return 
     toAdd = []
     
@@ -30,6 +42,7 @@ def step(x, binary):
             #Otherwise append 0
             toAdd.append(0)
     #Return the row to add as a numpy array
+    
     return np.array(toAdd)
 
 #Helper function to determine the styling of first row of matrix
@@ -49,8 +62,29 @@ def firstRow(size, cond, lOR):
     elif cond == 2:
         return np.random.randint(2, size=size)
     
+#Sub function that zooms in on the dimensions we want
+def getFrame(matrix, rows,col,lOR):
+    #initializes 0 matrix of requested dimensions
+    frame = np.zeros((rows, col), dtype=np.int8)
+    #setting the offset for if the user specifies if they want left or right starting for even columns
+    offset = 0 if lOR=='right' else 1
+    
+    #if columns are even, then add the offset
+    if col%2==0:
+        leftBound = 499-(col//2)+1+offset
+        rightBound = 499+(col//2)+1+offset
+    else:
+        #if columns are odd then the value is just in the middle
+        leftBound = 499-(col//2)+1
+        rightBound = 499+(col//2)+2
+    
+    #iterate through the frame matrix and set each element equal to the subarray of the overarching matrix
+    for i in range(rows):       
+        frame[i] = matrix[i][leftBound:rightBound] 
+    return frame    
+        
 #Main function
-def cellular_automaton(rule=110, rows=8, col=13, style=0,lOR = 0):
+def cellular_automaton(rule=110, rows=8, col=13, style=0,lOR = 'right'):
     #Checks to make sure that parameters are all valid
     if not isinstance(rule, int) or rule<0 or rule>255:
         raise Exception("Rule number out of bounds")
@@ -60,23 +94,26 @@ def cellular_automaton(rule=110, rows=8, col=13, style=0,lOR = 0):
         raise Exception("Invalid Column value")
     if style<0 or style >2:
         raise Exception("Invalid Style selection")
+    if col%2==0 and (not isinstance(lOR, str) or (lOR != 'right' and lOR != 'left')):
+        raise Exception("Invalid left or right selection")
     
     #Get the binary representation of rule number as a string
     binary = np.binary_repr(rule, width=8) 
     #Convert the binary into an array
     binToArr = np.array([int(digit) for digit in binary])
     #Create a matrix filled with 0's
-    matrix = np.zeros((rows, col), dtype=np.int8) 
+    matrix = np.zeros((1000, 1000), dtype=np.int8) 
     #set the first row with appropriate styling
-    matrix[0] = firstRow(col, style,lOR)
+    matrix[0] = firstRow(1000, style,lOR)
     
     #Iterate through the specified length and call the step function 
     # to generate the rows
-    for i in range(rows - 1):
+    for i in range(len(matrix)-1):
         matrix[i + 1] = step(matrix[i], binToArr)
-    
-    plotDat(matrix, rule)
-    return matrix
+        
+    frame = getFrame(matrix,rows,col,lOR)
+    plotDat(frame, rule)
+    return frame
 
 # Helper function that generates the plot
 def plotDat(data, rule):
@@ -89,13 +126,12 @@ try:
     rule = int(input("Rule Number?: "))
     rows = int(input("How many Rows?: "))
     col = int(input("How many Columns?: "))
-    lOR = 0
+    lOR = 'right'
     if col%2==0:
-        lOR = int(input("Columns are even, where would you like the starting index? (0 for left, 1 for right): "))
+        lOR = input("Columns are even, where would you like the starting index? ('left' for left, 'right' for right): ")
 
     style = int(input("What kind of start styling? (0 for a row of 0's with a 1 in the middle, 1 for a row of 1's with a 0 in the middle, 2 for random): "))
 except ValueError:
     raise Exception("Please enter numbers")
 
-data = cellular_automaton(rule,rows,col,style,lOR)
-plotDat(data, rule)
+cellular_automaton(rule,rows,col,style,lOR)
