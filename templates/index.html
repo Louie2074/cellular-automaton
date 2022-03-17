@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <title>Cellular Automaton Generator</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </head>
+  <body>
+    <h1 style="text-align: center">Cellular Automaton Generator</h1>
+    <div id="container" width="500px"></div>
+    <form class="options" action="{{ url_for('index') }}" method="POST">
+      <input
+        class="button"
+        name="rule"
+        id = 'rule'
+        type="range"
+        min="0"
+        step="1"
+        max="255"
+        value="0"
+      />
+      <p class="numVal">0</p>
+      <input name = 'rows' class="button" placeholder="Rows" type="number"/>
+      <input class="button" name="col" placeholder="Col" type="number"/>
+      <select name="style">
+        <option value="0">0's</option>
+        <option value="1">1's</option>
+        <option value="2">Random</option>
+        <option value="3">End 1</option>
+      </select>
+      <select name="lOR">
+        <option value="left">Left</option>
+        <option value="right">Right</option>
+      </select>
+
+      <button id="submit">Submit</button>
+    </form>
+    <script>
+        const main = document.querySelector('#container');
+        let data = `{{data}}`;
+        init(data, main)
+
+    </script>
+    
+    <script>
+      const rule = document.querySelector('#rule');
+      const px = document.querySelector('.numVal');
+      rule.addEventListener('change', (event) => {
+        px.textContent = `${event.target.value}`;
+      });
+    </script>
+  </body>
+</html>

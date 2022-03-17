@@ -1,5 +1,6 @@
 
 import numpy as np
+import math
 from matplotlib import pyplot
 
 #############################
@@ -61,9 +62,17 @@ def firstRow(size, cond, lOR):
     #If cond is 2 than the first row will be a random combo of 1's or 0's
     elif cond == 2:
         return np.random.randint(2, size=size)
+    elif cond==3:
+        row = [0] * size 
+        row[-1] = 1
+        return np.array(row)
+    elif cond==4:
+        row = [0] * size 
+        row[0] = 1
+        return np.array(row)
     
 #Sub function that zooms in on the dimensions we want
-def getFrame(matrix, rows,col,lOR):
+def getFrame(matrix, rows,col,lOR,dim):
     #initializes 0 matrix of requested dimensions
     frame = np.zeros((rows, col), dtype=np.int8)
     #setting the offset for if the user specifies if they want left or right starting for even columns
@@ -71,12 +80,12 @@ def getFrame(matrix, rows,col,lOR):
     
     #if columns are even, then add the offset
     if col%2==0:
-        leftBound = 499-(col//2)+1+offset
-        rightBound = 499+(col//2)+1+offset
+        leftBound = (dim//2-1)-(col//2)+1+offset
+        rightBound = (dim//2-1)+(col//2)+1+offset
     else:
         #if columns are odd then the value is just in the middle
-        leftBound = 499-(col//2)+1
-        rightBound = 499+(col//2)+2
+        leftBound = (dim//2-1)-(col//2)+1
+        rightBound = (dim//2-1)+(col//2)+2
     
     #iterate through the frame matrix and set each element equal to the subarray of the overarching matrix
     for i in range(rows):       
@@ -92,27 +101,27 @@ def cellular_automaton(rule=110, rows=8, col=13, style=0,lOR = 'right'):
         raise Exception("Invalid Row value")
     if not isinstance(col, int) or col<0:
         raise Exception("Invalid Column value")
-    if style<0 or style >2:
+    if style<0 or style >3:
         raise Exception("Invalid Style selection")
     if col%2==0 and (not isinstance(lOR, str) or (lOR != 'right' and lOR != 'left')):
         raise Exception("Invalid left or right selection")
-    
+    larger = max(col,rows)
+    dimension = math.ceil(larger/10)*10 if larger%10!=0 else larger+10
     #Get the binary representation of rule number as a string
     binary = np.binary_repr(rule, width=8) 
     #Convert the binary into an array
     binToArr = np.array([int(digit) for digit in binary])
     #Create a matrix filled with 0's
-    matrix = np.zeros((1000, 1000), dtype=np.int8) 
+    matrix = np.zeros((dimension, dimension), dtype=np.int8) 
     #set the first row with appropriate styling
-    matrix[0] = firstRow(1000, style,lOR)
+    matrix[0] = firstRow(dimension, style,lOR)
     
     #Iterate through the specified length and call the step function 
     # to generate the rows
     for i in range(len(matrix)-1):
         matrix[i + 1] = step(matrix[i], binToArr)
         
-    frame = getFrame(matrix,rows,col,lOR)
-    plotDat(frame, rule)
+    frame = getFrame(matrix,rows,col,lOR,dimension)
     return frame
 
 # Helper function that generates the plot
@@ -122,16 +131,16 @@ def plotDat(data, rule):
     pyplot.title(f"Rule: {rule}")
     pyplot.show()
     
-try:
-    rule = int(input("Rule Number?: "))
-    rows = int(input("How many Rows?: "))
-    col = int(input("How many Columns?: "))
-    lOR = 'right'
-    if col%2==0:
-        lOR = input("Columns are even, where would you like the starting index? ('left' for left, 'right' for right): ")
+# try:
+#     rule = int(input("Rule Number?: "))
+#     rows = int(input("How many Rows?: "))
+#     col = int(input("How many Columns?: "))
+#     lOR = 'right'
+#     if col%2==0:
+#         lOR = input("Columns are even, where would you like the starting index? ('left' for left, 'right' for right): ")
 
-    style = int(input("What kind of start styling? (0 for a row of 0's with a 1 in the middle, 1 for a row of 1's with a 0 in the middle, 2 for random): "))
-except ValueError:
-    raise Exception("Please enter numbers")
+#     style = int(input("What kind of start styling? (0 for a row of 0's with a 1 in the middle, 1 for a row of 1's with a 0 in the middle, 2 for random): "))
+# except ValueError:
+#     raise Exception("Please enter numbers")
 
-cellular_automaton(rule,rows,col,style,lOR)
+# cellular_automaton(rule,rows,col,style,lOR)

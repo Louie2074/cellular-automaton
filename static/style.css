@@ -1,0 +1,53 @@
+html,body{
+    margin: 0;
+    padding: 0;
+    
+}
+body{
+    background-color: lightgray;
+}
+
+#container{
+    display: block;
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 2%;
+    background-color: white;
+   
+}
+
+.button{
+    width: 5%;
+    margin-right: 5%;
+}
+
+.options{
+    display:flex;  
+    justify-content: center;
+}
+.size, .clear, .numVal, .rainbow, .black{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 1%;
+}
+
+.grid-box{
+    display:inline-block; 
+    border-style:solid;
+ border-color: black;
+ border-width: 0px;
+}
+
+.row {
+    display: block;
+    white-space: pre;
+    font-size: 0;
+  }
+
+  @media only screen and (max-width: 600px) {
+    body{
+        overflow: hidden;
+    }
+  }
