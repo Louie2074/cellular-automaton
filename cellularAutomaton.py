@@ -125,23 +125,3 @@ def cellular_automaton(rule=110, rows=8, col=13, style=0,lOR = 'right'):
     frame = getFrame(matrix,rows,col,lOR,dimension)
     return frame
 
-# Helper function that generates the plot
-def plotDat(data, rule):
-    pyplot.figure(figsize=(8,8))
-    pyplot.imshow(data)
-    pyplot.title(f"Rule: {rule}")
-    pyplot.show()
-    
-# try:
-#     rule = int(input("Rule Number?: "))
-#     rows = int(input("How many Rows?: "))
-#     col = int(input("How many Columns?: "))
-#     lOR = 'right'
-#     if col%2==0:
-#         lOR = input("Columns are even, where would you like the starting index? ('left' for left, 'right' for right): ")
-
-#     style = int(input("What kind of start styling? (0 for a row of 0's with a 1 in the middle, 1 for a row of 1's with a 0 in the middle, 2 for random): "))
-# except ValueError:
-#     raise Exception("Please enter numbers")
-
-# cellular_automaton(rule,rows,col,style,lOR)

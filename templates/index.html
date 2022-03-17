@@ -8,27 +8,44 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
-    <title>Cellular Automaton Generator</title>
+    <title>Louis's Cellular Automaton Generator</title>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </head>
   <body>
-    <h1 style="text-align: center">Cellular Automaton Generator</h1>
+    <h1 style="text-align: center">Louis's Cellular Automaton Generator</h1>
     <div id="container" width="500px"></div>
     <form class="options" action="{{ url_for('index') }}" method="POST">
       <input
         class="button"
         name="rule"
-        id = 'rule'
-   
+        id="rule"
+        value="0"
+        min="0"
+        type="number"
+        oninput="validity.valid||(value=0);"
       />
-      <p class="numVal">0</p>
-      <input name = 'rows' class="button" placeholder="Rows" type="number"/>
-      <input class="button" name="col" placeholder="Col" type="number"/>
+      <input
+        name="rows"
+        value="0"
+        min="0"
+        class="button"
+        type="number"
+        oninput="validity.valid||(value=0);"
+      />
+      <input
+        class="button"
+        value="0"
+        min="0"
+        name="col"
+        type="number"
+        oninput="validity.valid||(value=0);"
+      />
       <select name="style">
         <option value="0">0's</option>
         <option value="1">1's</option>
         <option value="2">Random</option>
         <option value="3">End 1</option>
+        <option value="4">Beginning 1</option>
       </select>
       <select name="lOR">
         <option value="left">Left</option>
@@ -37,18 +54,21 @@
 
       <button id="submit">Submit</button>
     </form>
+    <p class="desc">
+      To use this program, <br />
+      The 1st option is a positive integer between 0 and 255 that specifies the
+      rule number <br />
+      The 2nd option is a positive integer that specifies the amount of rows you
+      want <br />
+      The 3rd option is a positive integer that specifies the amount of column's
+      you want <br />
+      The 4th option specifies the styling of the first row <br />
+      The 5th option only applies to odd column values and specifies the
+      starting digit as either left or right
+    </p>
     <script>
-        let data = `{{data}}`;
-        init(data)
-
-    </script>
-    
-    <script>
-      const rule = document.querySelector('#rule');
-      const px = document.querySelector('.numVal');
-      rule.addEventListener('change', (event) => {
-        px.textContent = `${event.target.value}`;
-      });
+      let data = `{{data}}`;
+      init(data);
     </script>
   </body>
 </html>

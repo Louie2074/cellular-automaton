@@ -1,9 +1,11 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, request
 import cellularAutomaton as ca
 app = Flask(__name__)
 
 def parseReq(form):
     rule = 0 if form['rule']== '' else int(form['rule']) 
+    if rule>255:
+      rule = 255
     rows = 0 if form['rows']== '' else int(form['rows']) 
     col = 0 if form['col']== '' else int(form['col']) 
     style = 0 if form['style']== '' else int(form['style']) 
