@@ -1,6 +1,6 @@
 # cellular-automaton
-Flask application that generates a visual graph of cellular automata based on binary rule number, deployed on heroku
+Flask application that generates a visual pattern of cellular automata based on binary rule number, deployed on heroku
 
 https://my-cellular-automaton.herokuapp.com/
 
-![GitHub Logo](/sample.png)
+![GitHub Logo](/example.png)
