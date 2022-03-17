@@ -3,4 +3,4 @@ Flask application that generates a visual graph of cellular automata based on bi
 
 https://my-cellular-automaton.herokuapp.com/
 
-![GitHub Logo](/samle.png)
+![GitHub Logo](/sample.png)
