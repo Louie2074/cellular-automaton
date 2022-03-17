@@ -1,5 +1,6 @@
-
+import sys
 import numpy as np
+np.set_printoptions(threshold=sys.maxsize)
 import math
 from matplotlib import pyplot
 

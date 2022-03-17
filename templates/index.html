@@ -19,11 +19,7 @@
         class="button"
         name="rule"
         id = 'rule'
-        type="range"
-        min="0"
-        step="1"
-        max="255"
-        value="0"
+   
       />
       <p class="numVal">0</p>
       <input name = 'rows' class="button" placeholder="Rows" type="number"/>
@@ -42,9 +38,8 @@
       <button id="submit">Submit</button>
     </form>
     <script>
-        const main = document.querySelector('#container');
         let data = `{{data}}`;
-        init(data, main)
+        init(data)
 
     </script>
     

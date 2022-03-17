@@ -16,7 +16,6 @@ def index():
   if request.method == 'POST':
     form = request.form
     data = parseReq(form)
-    
   return render_template('index.html', data=data)
 if __name__ == "__main__":
   app.run(debug=True)

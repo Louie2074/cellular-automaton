@@ -1,59 +1,61 @@
-
-let test = '[[0 0 0 0 1 0 0 0 0 0]\n[1 1 1 0 0 0 1 1 1 1]\n[1 1 0 0 1 0 0 1 1 1]\n[1 0 0 0 0 0 0 0 1 1]\n[0 0 1 1 1 1 1 0 0 1]\n[0 0 0 1 1 1 0 0 0 0]\n[1 1 0 0 1 0 0 1 1 0]\n[0 0 0 0 0 0 0 0 0 0]\n[1 1 1 1 1 1 1 1 1 1]\n[1 1 1 1 1 1 1 1 1 1]]'
-
-let boxes = [];
-function initGrid(size,main) {
-  const maxWidth = parseInt(main.getAttribute('width'));
-  for (let i = 0; i < size; i++) {
+function initGrid(plot, boxes, main, maxWidth) {
+  for (let i = 0; i < plot.length; i++) {
     let row = document.createElement('div');
+    let rowB = [];
     row.className = 'row';
-    for (let j = 0; j < size; j++) {
+    for (let j = 0; j < plot[i].length; j++) {
       let box = document.createElement('div');
       box.classList.add('grid-box');
       box.textContent = '';
       row.appendChild(box);
-      boxes.push(box);
+      rowB.push(box);
     }
+    boxes.push(rowB);
     main.appendChild(row);
   }
 
-  for (let box of boxes) {
-    box.style.width = maxWidth / size + 'px';
-    box.style.height = maxWidth / size + 'px';
-  }
-}
-
-function init(data,main){
-  
-  clear()
-  let plot = []
-  const result = data.replace(/\[/g, '').replace(/]/g, '').replace(/ /g,'').split(/\r?\n/);
-  for(let x of result){
-    let row = []
-    for(let y of x){
-      row.push(Number(y))
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = 0; j < boxes[i].length; j++) {
+      boxes[i][j].style.width = maxWidth / plot[i].length + 'px';
+      boxes[i][j].style.height = maxWidth / plot.length + 'px';
     }
-    plot.push(row)
   }
-  initGrid(plot[0].length,main);
-  draw(plot);
- 
 }
 
+function init(data) {
+  const main = document.getElementById('container');
+  const maxWidth = parseInt(main.getAttribute('width'));
+  plot = wrangleData(data);
+  let boxes = [];
+  initGrid(plot, boxes, main, maxWidth);
+  draw(plot, boxes);
+}
 
+function wrangleData(data) {
+  plot = [];
+  const result = data
+    .substring(2, data.length - 2)
+    .replace(/\[/g, '')
+    .replace(/[\r\n]/g, '')
+    .replace(/ /g, '')
+    .split(']');
 
-function draw(plot) {
-  for(let i = 0; i<plot.length; i++){
-    for(let j = 0; j<plot[i].length; j++){
-      if(plot[i][j]==1){
+  for (let x of result) {
+    let row = [];
+    for (let y of x) {
+      row.push(Number(y));
+    }
+    plot.push(row);
+  }
+  return plot;
+}
+
+function draw(plot, boxes) {
+  for (let i = 0; i < plot.length; i++) {
+    for (let j = 0; j < plot[i].length; j++) {
+      if (plot[i][j] == 1) {
         boxes[i][j].style.backgroundColor = 'black';
       }
     }
   }
-}
-
-function clear(){
-   boxes.forEach(function (box) {
-     box.style.backgroundColor = 'white';
-   });
 }
